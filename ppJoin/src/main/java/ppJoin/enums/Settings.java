@@ -5,7 +5,13 @@ public enum Settings {
 
     SECONDARY_TEST_RECORD_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\records2.csv"),
 
-    THIRD_TEST_RECORD_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\records3.csv");
+    THIRD_TEST_RECORD_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\records3.csv"),
+
+    RECORD_1000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output1000.csv"),
+
+    RECORD_10000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output10000.csv"),
+
+    RECORD_100000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output100000.csv");
 
     Settings(String value) {
         this.value = value;

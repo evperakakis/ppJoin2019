@@ -7,14 +7,17 @@ import ppJoin.pojos.InvertedIndex;
 import ppJoin.pojos.Occurrence;
 import ppJoin.pojos.Record;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ppJoin.enums.Settings.RECORD_FILE_PATH;
-import static ppJoin.enums.Settings.SECONDARY_TEST_RECORD_FILE_PATH;
-import static ppJoin.enums.Settings.THIRD_TEST_RECORD_FILE_PATH;
+import static ppJoin.enums.Settings.*;
 
 class PPjoinExecutor {
 
@@ -29,9 +32,11 @@ class PPjoinExecutor {
     void execute() {
 
         // Read from csv to List<Record>
-        //List<Record> recordList = readerService.csvToRecordList(RECORD_FILE_PATH.getValue(), 3);
-        //List<Record> recordList = readerService.csvToRecordList(SECONDARY_TEST_RECORD_FILE_PATH.getValue(), 3); //0.71428571
-        List<Record> recordList = readerService.csvToRecordList(THIRD_TEST_RECORD_FILE_PATH.getValue(), 3);
+//        List<Record> recordList = readerService.csvToRecordList(RECORD_FILE_PATH.getValue(), 3);
+//        List<Record> recordList = readerService.csvToRecordList(SECONDARY_TEST_RECORD_FILE_PATH.getValue(), 3); //0.71428571
+//        List<Record> recordList = readerService.csvToRecordList(RECORD_1000_FILE_PATH.getValue(), 3);
+        List<Record> recordList = readerService.csvToRecordList(RECORD_10000_FILE_PATH.getValue(), 3);
+//        List<Record> recordList = readerService.csvToRecordList(RECORD_100000_FILE_PATH.getValue(), 3);
 
         System.out.println("--- RECORD LIST: ---");
         for (Record record : recordList)
@@ -51,11 +56,14 @@ class PPjoinExecutor {
 
         final Map<Integer, Record> recordMap = initializationService.listOfRecordsToIdMap(recordList);
 
-        findPairs(recordMap, 0.1999999999);
+        findPairs(recordMap, 0.6999);
     }
 
 
     private void findPairs(final Map<Integer, Record> recordMap, final Double similarityThreshold) {
+
+        System.out.println("\n" + "Starting ppJoin...");
+        LocalDateTime startTime = LocalDateTime.now();
 
         for (Map.Entry<Integer, Record> entryRM : recordMap.entrySet()) {
             Integer recordIdX = entryRM.getKey();
@@ -95,11 +103,11 @@ class PPjoinExecutor {
                 InvertedIndex.getInstance().addToInvertedIndex(nGram, recordIdX, positionI);
             }
 
-            System.out.println("----------------------------------");
-            System.out.println("VERIFY :: record = " + recordX + ", ");
-            overlapMap.forEach((recordId, overlap) -> System.out.println("recordOverlap = " +
-                    recordMap.get(recordId) + ", Overlap = " + overlap));
-            System.out.println("----------------------------------");
+//            System.out.println("----------------------------------");
+//            System.out.println("VERIFY :: record = " + recordX + ", ");
+//            overlapMap.forEach((recordId, overlap) -> System.out.println("recordOverlap = " +
+//                    recordMap.get(recordId) + ", Overlap = " + overlap));
+//            System.out.println("----------------------------------");
 
             final Map<Record, Integer> overlapMapVerify = new HashMap<>();
 
@@ -108,11 +116,17 @@ class PPjoinExecutor {
             ppJoinVerify(recordX, overlapMapVerify, similarityThreshold);
         }
 
+        LocalDateTime stopTime = LocalDateTime.now();
+        long executionTime = ChronoUnit.SECONDS.between(startTime, stopTime);
+
         System.out.println("--- INVERTED INDEX: ---");
         System.out.println(InvertedIndex.getInstance().getIndex());
         System.out.println("----------------------------------------------------------------------------------------------------------------");
         System.out.println("----------------------PAIRS----------------------\n");
         System.out.println(temporaryPairs);
+
+        System.out.println("\n" + "Execution Time :: " + executionTime + " seconds.");
+
     }
 
 
