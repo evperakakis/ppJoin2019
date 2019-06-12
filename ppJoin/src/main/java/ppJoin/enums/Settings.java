@@ -11,7 +11,9 @@ public enum Settings {
 
     RECORD_10000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output10000.csv"),
 
-    RECORD_100000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output100000.csv");
+    RECORD_100000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output100000.csv"),
+
+    TEMP_RECORDS_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\temp\\");
 
     Settings(String value) {
         this.value = value;

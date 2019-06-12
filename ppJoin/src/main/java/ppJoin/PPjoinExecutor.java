@@ -2,41 +2,28 @@ package ppJoin;
 
 import ppJoin.Services.InitializationService;
 import ppJoin.Services.ReaderService;
-import ppJoin.pojos.FrequencyIndex;
-import ppJoin.pojos.InvertedIndex;
-import ppJoin.pojos.Occurrence;
-import ppJoin.pojos.Record;
+import ppJoin.interfaces.TextualJoinExecutor;
+import ppJoin.pojos.*;
 
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ppJoin.enums.Settings.*;
+class PPjoinExecutor implements TextualJoinExecutor {
 
-class PPjoinExecutor {
-
-    private ReaderService readerService = new ReaderService();
     private InitializationService initializationService = new InitializationService();
 
     private List<String> temporaryPairs =  new ArrayList<>();
 
+    public static List<RecordPair> recordPairs = new ArrayList<>();
+
 
     PPjoinExecutor() {}
 
-    void execute() {
-
-        // Read from csv to List<Record>
-//        List<Record> recordList = readerService.csvToRecordList(RECORD_FILE_PATH.getValue(), 3);
-//        List<Record> recordList = readerService.csvToRecordList(SECONDARY_TEST_RECORD_FILE_PATH.getValue(), 3); //0.71428571
-//        List<Record> recordList = readerService.csvToRecordList(RECORD_1000_FILE_PATH.getValue(), 3);
-        List<Record> recordList = readerService.csvToRecordList(RECORD_10000_FILE_PATH.getValue(), 3);
-//        List<Record> recordList = readerService.csvToRecordList(RECORD_100000_FILE_PATH.getValue(), 3);
+    public void execute(List<Record> recordList) {
 
         System.out.println("--- RECORD LIST: ---");
         for (Record record : recordList)
@@ -62,7 +49,6 @@ class PPjoinExecutor {
 
     private void findPairs(final Map<Integer, Record> recordMap, final Double similarityThreshold) {
 
-        System.out.println("\n" + "Starting ppJoin...");
         LocalDateTime startTime = LocalDateTime.now();
 
         for (Map.Entry<Integer, Record> entryRM : recordMap.entrySet()) {
@@ -124,6 +110,8 @@ class PPjoinExecutor {
         System.out.println("----------------------------------------------------------------------------------------------------------------");
         System.out.println("----------------------PAIRS----------------------\n");
         System.out.println(temporaryPairs);
+        System.out.println("Found " + temporaryPairs.size() + " pairs for similarity threshold " + similarityThreshold);
+
 
         System.out.println("\n" + "Execution Time :: " + executionTime + " seconds.");
 
@@ -179,6 +167,7 @@ class PPjoinExecutor {
                 if (valueO >= a) {
                     temporaryPairs.add(record.toString() + "\n   ++++PAIR++++ \n" + recordFromOverlapMap.toString() +
                     "\n\n\n");
+                    recordPairs.add(new RecordPair(record, recordFromOverlapMap));
                 }
             }
 

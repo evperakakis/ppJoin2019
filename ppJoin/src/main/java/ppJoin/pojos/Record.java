@@ -16,6 +16,8 @@ public class Record {
         this.nGramsList = nGramsList;
     }
 
+    public Record() {}
+
     public String getTextValue() {
         return textValue;
     }
