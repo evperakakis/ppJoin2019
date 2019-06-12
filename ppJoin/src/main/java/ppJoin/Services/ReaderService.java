@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class ReaderService {
 
-    public List<Record> csvToRecordList (String csvLocation, int n) {
+    public List<Record> csvToRecordList (String csvLocation, int n , boolean includeNgrams) {
         ArrayList<Record> recordList = new ArrayList<>();
         Pattern pattern = Pattern.compile("\\s"); // pattern to check if String contains whitespaces
 
@@ -24,17 +24,20 @@ public class ReaderService {
             CsvParser.mapTo(Record.class).headers("textValue", "axisValueX", "axisValueY")
                     .stream(br).forEach(recordList::add);
 
-            for (Record record : recordList) {
-                String textValue = record.getTextValue();
-                List<String> nGrams = new ArrayList<>();
-                for (int i = 0; i < textValue.length() - n + 1; i++) {
-                    boolean stringHasWhitespaces = pattern.matcher(textValue.substring(i, i + n)).find();
-                    if (!stringHasWhitespaces) {
-                        nGrams.add(textValue.substring(i, i + n));
+            if (includeNgrams) {
+                for (Record record : recordList) {
+                    String textValue = record.getTextValue();
+                    List<String> nGrams = new ArrayList<>();
+                    for (int i = 0; i < textValue.length() - n + 1; i++) {
+                        boolean stringHasWhitespaces = pattern.matcher(textValue.substring(i, i + n)).find();
+                        if (!stringHasWhitespaces) {
+                            nGrams.add(textValue.substring(i, i + n));
+                        }
                     }
+                    record.setNGramsList(nGrams);
                 }
-                record.setNGramsList(nGrams);
             }
+            br.close();
 
         } catch (FileNotFoundException e) {
             System.out.println("FILE NOT FOUND");
@@ -42,8 +45,7 @@ public class ReaderService {
         } catch (IOException e) {
             System.out.println("IO EXCEPTION");
             e.printStackTrace();
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             System.out.println("NUMBER FORMAT EXCEPTION");
             e.printStackTrace();
         }
