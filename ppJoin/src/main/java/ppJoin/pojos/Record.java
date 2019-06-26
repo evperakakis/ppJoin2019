@@ -59,4 +59,28 @@ public class Record {
                 ", nGramsList=" + nGramsList +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Record)) {
+            return false;
+        }
+        final Record record = (Record) obj;
+
+        return this.getAxisValueX() == record.getAxisValueX()
+                && this.getAxisValueY() == record.getAxisValueY()
+                && this.getTextValue().equalsIgnoreCase(record.getTextValue());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (int) (19*this.getAxisValueX()
+                +this.getAxisValueY()
+                +this.getTextValue().length()
+                +(this.getAxisValueY()*this.getAxisValueX()));
+    }
 }
