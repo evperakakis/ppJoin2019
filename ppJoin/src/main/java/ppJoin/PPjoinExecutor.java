@@ -1,7 +1,6 @@
 package ppJoin;
 
 import ppJoin.Services.InitializationService;
-import ppJoin.Services.ReaderService;
 import ppJoin.interfaces.TextualJoinExecutor;
 import ppJoin.pojos.*;
 
@@ -16,39 +15,27 @@ class PPjoinExecutor implements TextualJoinExecutor {
 
     private InitializationService initializationService = new InitializationService();
 
-    private List<String> temporaryPairs =  new ArrayList<>();
-
     public static List<RecordPair> recordPairs = new ArrayList<>();
-
 
     PPjoinExecutor() {}
 
-    public void execute(List<Record> recordList) {
-
-        System.out.println("--- RECORD LIST: ---");
-        for (Record record : recordList)
-            System.out.println(record.toString());
-        System.out.println("----------------------------------------------------------------------------");
-
+    public void execute(List<Record> recordList, Double similarityThreshold) {
         recordList = initializationService.initializeForPPjoin(recordList);
 
-        System.out.println("--- SORTED RECORD LIST: ---");
-        for (Record record : recordList)
-            System.out.println(record.toString());
-        System.out.println("----------------------------------------------------------------------------");
+//        System.out.println("--- SORTED RECORD LIST: ---");
+//        for (Record record : recordList)
+//            System.out.println(record.toString());
+//        System.out.println("----------------------------------------------------------------------------");
 
-        System.out.println("--- FREQUENCY INDEX: ---");
-        System.out.println(FrequencyIndex.getInstance().getIndex());
-        System.out.println("----------------------------------------------------------------------------");
+//        System.out.println("--- FREQUENCY INDEX: ---");
+//        System.out.println(FrequencyIndex.getInstance().getIndex());
+//        System.out.println("----------------------------------------------------------------------------");
 
         final Map<Integer, Record> recordMap = initializationService.listOfRecordsToIdMap(recordList);
-
-        findPairs(recordMap, 0.6999);
+        findPairs(recordMap, similarityThreshold);
     }
 
-
     private void findPairs(final Map<Integer, Record> recordMap, final Double similarityThreshold) {
-
         LocalDateTime startTime = LocalDateTime.now();
 
         for (Map.Entry<Integer, Record> entryRM : recordMap.entrySet()) {
@@ -89,12 +76,6 @@ class PPjoinExecutor implements TextualJoinExecutor {
                 InvertedIndex.getInstance().addToInvertedIndex(nGram, recordIdX, positionI);
             }
 
-//            System.out.println("----------------------------------");
-//            System.out.println("VERIFY :: record = " + recordX + ", ");
-//            overlapMap.forEach((recordId, overlap) -> System.out.println("recordOverlap = " +
-//                    recordMap.get(recordId) + ", Overlap = " + overlap));
-//            System.out.println("----------------------------------");
-
             final Map<Record, Integer> overlapMapVerify = new HashMap<>();
 
             overlapMap.forEach((recordId, overlap) -> overlapMapVerify.put(recordMap.get(recordId), overlap));
@@ -104,17 +85,9 @@ class PPjoinExecutor implements TextualJoinExecutor {
 
         LocalDateTime stopTime = LocalDateTime.now();
         long executionTime = ChronoUnit.SECONDS.between(startTime, stopTime);
-
-        System.out.println("--- INVERTED INDEX: ---");
-        System.out.println(InvertedIndex.getInstance().getIndex());
-        System.out.println("----------------------------------------------------------------------------------------------------------------");
-        System.out.println("----------------------PAIRS----------------------\n");
-        System.out.println(temporaryPairs);
-        System.out.println("Found " + temporaryPairs.size() + " pairs for similarity threshold " + similarityThreshold);
-
-
-        System.out.println("\n" + "Execution Time :: " + executionTime + " seconds.");
-
+        System.out.println("\n" + "Partition Execution Time :: "
+                + String.format("%02d:%02d:%02d",(executionTime/3600), ((executionTime % 3600)/60), (executionTime % 60))
+                + ". (" + executionTime + " seconds)");
     }
 
 
@@ -165,8 +138,6 @@ class PPjoinExecutor implements TextualJoinExecutor {
                 valueO = valueO + intersection;
 
                 if (valueO >= a) {
-                    temporaryPairs.add(record.toString() + "\n   ++++PAIR++++ \n" + recordFromOverlapMap.toString() +
-                    "\n\n\n");
                     recordPairs.add(new RecordPair(record, recordFromOverlapMap));
                 }
             }

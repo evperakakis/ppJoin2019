@@ -13,6 +13,8 @@ public enum Settings {
 
     RECORD_100000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output100000.csv"),
 
+    RECORD_1000000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output1000000.csv"),
+
     TEMP_RECORDS_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\temp\\");
 
     Settings(String value) {
