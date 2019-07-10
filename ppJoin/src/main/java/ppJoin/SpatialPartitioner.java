@@ -2,8 +2,6 @@ package ppJoin;
 
 import org.danilopianini.util.FlexibleQuadTree;
 import org.danilopianini.util.SpatialIndex;
-import ppJoin.Services.ReaderService;
-import ppJoin.enums.Settings;
 import ppJoin.pojos.Record;
 
 import java.io.*;
@@ -11,24 +9,13 @@ import java.util.*;
 
 import static ppJoin.enums.Settings.TEMP_RECORDS_PATH;
 
-public class SpatialPartitioner {
+class SpatialPartitioner {
 
     Integer csvFileCounter = 0;
 
-
-    private ReaderService readerService = new ReaderService();
-
-    public void partitionData(List<Record> recordList) {
-
-        Double distanceThreshold = 100.0;
-
+    void partitionData(List<Record> recordList, Double distanceThreshold) {
         partition2dSpaceForConcurrentSpatialJoin(recordList, distanceThreshold,
                 findUpperRightPoint(recordList), findLowerLeftPoint(recordList));
-
-    }
-
-    private Double euclideanDistanceOfRecords (Record r1, Record r2) {
-        return Math.hypot(r1.getAxisValueX()-r2.getAxisValueX(), r1.getAxisValueY()-r2.getAxisValueY());
     }
 
     private Double euclideanDistance (Double x1, Double y1, Double x2, Double y2) {
@@ -36,34 +23,12 @@ public class SpatialPartitioner {
     }
 
     private Record findUpperRightPoint (List<Record> recordList) {
-//        Double maxDistance = 0.0;
-//        Record upperRightRecord = new Record("", 0, 0, Collections.emptyList());
-//        Record OORecord = upperRightRecord;
-//        for (Record record : recordList) {
-//            Double currentDistance = euclideanDistanceOfRecords(OORecord, record);
-//            if (currentDistance > maxDistance) {
-//                maxDistance = currentDistance;
-//                upperRightRecord = record;
-//            }
-//        }
-//        return upperRightRecord;
         Double x = findMaxRightPoint(recordList).getAxisValueX();
         Double y = findMaxHeightPoint(recordList).getAxisValueY();
         return new Record("", x, y, Collections.emptyList());
     }
 
     private Record findLowerLeftPoint (List<Record> recordList) {
-//        Double minDistance = Double.MAX_VALUE;
-//        Record lowerLeftRecord = new Record("", Double.MAX_VALUE, Double.MAX_VALUE, Collections.emptyList());
-//        Record OORecord = new Record("", 0, 0, Collections.emptyList());
-//        for (Record record : recordList) {
-//            Double currentDistance = euclideanDistanceOfRecords(OORecord, record);
-//            if (currentDistance < minDistance) {
-//                minDistance = currentDistance;
-//                lowerLeftRecord = record;
-//            }
-//        }
-//        return lowerLeftRecord;
         Double x = findMaxLeftPoint(recordList).getAxisValueX();
         Double y = findMaxBottomPoint(recordList).getAxisValueY();
         return new Record("",x ,y, Collections.emptyList());
@@ -130,10 +95,6 @@ public class SpatialPartitioner {
 
         while (querySpaceLowerLeft[1] < upperLeftPoint[1]) {
             while (querySpaceLowerLeft[0] < lowerRightPoint[0]) {
-
-                System.out.println("querySpaceLowerLeft : " + Arrays.toString(querySpaceLowerLeft));
-                System.out.println("querySpaceUpperRight : " + Arrays.toString(querySpaceUpperRight));
-
                 List<Record> queryResult = query(recordList, querySpaceLowerLeft, querySpaceUpperRight);
                 writeListToCSV(queryResult);
 
@@ -142,16 +103,11 @@ public class SpatialPartitioner {
 
                 querySpaceUpperRight = new double[]{querySpaceUpperRight[0] + distanceThreshold,
                         querySpaceUpperRight[1]};
-
-
-
             }
-            System.out.println("--------------------------------------------------------------------------------------");
             querySpaceLowerLeft = new double[]{lowerLeftPoint.getAxisValueX(),
                     querySpaceLowerLeft[1] + distanceThreshold};
             querySpaceUpperRight = new double[]{lowerLeftPoint.getAxisValueX() + distanceThreshold * 2,
                     querySpaceUpperRight[1] + distanceThreshold};
-            System.out.println("--------------------------------------------------------------------------------------");
         }
     }
 

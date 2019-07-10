@@ -76,8 +76,7 @@ public class Record {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return (int) (19*this.getAxisValueX()
                 +this.getAxisValueY()
                 +this.getTextValue().length()
