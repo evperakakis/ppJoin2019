@@ -82,7 +82,6 @@ class SpatialPartitioner {
         return maxBottomPoint;
     }
 
-
     private void partition2dSpaceForConcurrentSpatialJoin(List<Record> recordList, Double distanceThreshold,
                                                                Record upperRightPoint, Record lowerLeftPoint){
 
@@ -110,7 +109,6 @@ class SpatialPartitioner {
                     querySpaceUpperRight[1] + distanceThreshold};
         }
     }
-
 
     private List<Record> query(List<Record> recordList, double[]querySpaceLowerLeft, double[]querySpaceUpperRight) {
         double lowerLeftX = querySpaceLowerLeft[0];

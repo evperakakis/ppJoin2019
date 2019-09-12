@@ -6,16 +6,15 @@ import ppJoin.pojos.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class PPjoinExecutor implements TextualJoinExecutor {
 
     private InitializationService initializationService = new InitializationService();
 
     public static List<RecordPair> recordPairs = new ArrayList<>();
+
+    private long maxExecutionTimeOnThread;
 
     PPjoinExecutor() {}
 
@@ -88,6 +87,9 @@ class PPjoinExecutor implements TextualJoinExecutor {
         System.out.println("\n" + "Partition Execution Time :: "
                 + String.format("%02d:%02d:%02d",(executionTime/3600), ((executionTime % 3600)/60), (executionTime % 60))
                 + ". (" + executionTime + " seconds)");
+
+        if (executionTime > maxExecutionTimeOnThread)
+            maxExecutionTimeOnThread = executionTime;
     }
 
 
@@ -143,6 +145,14 @@ class PPjoinExecutor implements TextualJoinExecutor {
             }
 
         });
+    }
+
+    public HashSet<RecordPair> getRecordPairsToSet() {
+        return new HashSet<>(recordPairs);
+    }
+
+    public long getMaxExecutionTimeOnThread() {
+        return maxExecutionTimeOnThread;
     }
 
 }
