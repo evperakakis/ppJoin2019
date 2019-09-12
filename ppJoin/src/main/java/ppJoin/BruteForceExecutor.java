@@ -18,6 +18,8 @@ public class BruteForceExecutor implements TextualJoinExecutor {
 
     public static List<RecordPair> recordPairs = new ArrayList<>();
 
+    private long maxExecutionTimeOnThread;
+
     public void execute(List<Record> recordList, Double similarityThreshold) {
 
         LocalDateTime startTime = LocalDateTime.now();
@@ -34,9 +36,12 @@ public class BruteForceExecutor implements TextualJoinExecutor {
         }
         LocalDateTime stopTime = LocalDateTime.now();
         long executionTime = ChronoUnit.SECONDS.between(startTime, stopTime);
-        System.out.println("\n" + "Execution Time :: "
+        System.out.println("\n" + " Partition Execution Time :: "
                 + String.format("%02d:%02d:%02d",(executionTime/3600), ((executionTime % 3600)/60), (executionTime % 60))
                 + ". (" + executionTime + " seconds)");
+
+        if (executionTime > maxExecutionTimeOnThread)
+            maxExecutionTimeOnThread = executionTime;
     }
 
     private Double similarity(List<String> nGramList1, List<String> nGramList2) {
@@ -52,6 +57,14 @@ public class BruteForceExecutor implements TextualJoinExecutor {
         overlap = overlap + intersection;
 
         return overlap/(nGramSet.size());
+    }
+
+    public HashSet<RecordPair> getRecordPairsToSet() {
+        return new HashSet<>(recordPairs);
+    }
+
+    public long getMaxExecutionTimeOnThread() {
+        return maxExecutionTimeOnThread;
     }
 
     @Test

@@ -15,6 +15,12 @@ public enum Settings {
 
     RECORD_1000000_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\Output1000000.csv"),
 
+    RECORD_10000_CLUSTERED_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\OutputClusteredCircle10000.csv"),
+
+    RECORD_100000_CLUSTERED_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\OutputClusteredCircle100000.csv"),
+
+    RECORD_1000000_CLUSTERED_FILE_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\OutputClusteredCircle1000000.csv"),
+
     TEMP_RECORDS_PATH("C:\\Users\\Evaggelos\\Desktop\\Projects\\personal\\iliko_ptixiakis\\ppJoin\\src\\main\\resources\\temp\\");
 
     Settings(String value) {
