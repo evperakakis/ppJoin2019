@@ -37,11 +37,11 @@ public class Main {
 
 //        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_10000_FILE_PATH.getValue(), 3, false);
 //        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_100000_FILE_PATH.getValue(), 3, false);
-        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_1000000_FILE_PATH.getValue(), 3, false);
+//        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_1000000_FILE_PATH.getValue(), 3, false);
 
 //        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_10000_CLUSTERED_FILE_PATH.getValue(), 3, false);
 //        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_100000_CLUSTERED_FILE_PATH.getValue(), 3, false);
-//        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_1000000_CLUSTERED_FILE_PATH.getValue(), 3, false);
+        List<Record> initialRecordList = readerService.csvToRecordList(RECORD_1000000_CLUSTERED_FILE_PATH.getValue(), 3, false);
 
 //               !!!  WITHOUT PARTITIONING  !!!
 //        PPjoinExecutor ex = new PPjoinExecutor();
@@ -58,9 +58,9 @@ public class Main {
 //        Double similarityThreshold = 0.6999;
 //        Double similarityThreshold = 0.8999;
 
-        Double distanceThreshold = 10.0;
+//        Double distanceThreshold = 10.0;
 //        Double distanceThreshold = 40.0;
-//        Double distanceThreshold = 100.0;
+        Double distanceThreshold = 100.0;
 
         File dir = new File(TEMP_RECORDS_PATH.getValue());
 
@@ -68,8 +68,8 @@ public class Main {
         if (dir.listFiles() != null && dir.listFiles().length > 0)
             Arrays.stream(dir.listFiles()).forEach(File::delete);
 
-        // TextualJoinExecutor ex = new PPjoinExecutor();
-        TextualJoinExecutor ex = new BruteForceExecutor();
+         TextualJoinExecutor ex = new PPjoinExecutor();
+//        TextualJoinExecutor ex = new BruteForceExecutor();
 
         SpatialPartitioner spatialPartitioner = new SpatialPartitioner();
         spatialPartitioner.partitionData(initialRecordList, distanceThreshold);
