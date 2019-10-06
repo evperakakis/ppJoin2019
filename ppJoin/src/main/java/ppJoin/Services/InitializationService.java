@@ -55,7 +55,7 @@ public class InitializationService {
 
     public TreeMap<Integer, Record> listOfRecordsToIdMap(List<Record> recordList){
         TreeMap<Integer, Record > map = new TreeMap<>();
-        Integer id = 1;
+        int id = 1;
         for (Record record : recordList) {
             map.put(id, record);
             id++;

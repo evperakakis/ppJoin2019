@@ -1,29 +1,29 @@
 package ppJoin.pojos;
 
 public class Occurrence {
-    private Integer recordId;
-    private Integer position;
+    private int recordId;
+    private int position;
 
     public Occurrence() {}
 
-    public Occurrence(Integer recordId, Integer position) {
+    public Occurrence(int recordId, int position) {
         this.recordId = recordId;
         this.position = position;
     }
 
-    public Integer getRecordId() {
+    public int getRecordId() {
         return recordId;
     }
 
-    public void setRecordId(Integer recordId) {
+    public void setRecordId(int recordId) {
         this.recordId = recordId;
     }
 
-    public Integer getPosition() {
+    public int getPosition() {
         return position;
     }
 
-    public void setPosition(Integer position) {
+    public void setPosition(int position) {
         this.position = position;
     }
 

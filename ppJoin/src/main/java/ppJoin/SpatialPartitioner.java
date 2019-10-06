@@ -11,7 +11,7 @@ import static ppJoin.enums.Settings.TEMP_RECORDS_PATH;
 
 class SpatialPartitioner {
 
-    Integer csvFileCounter = 0;
+    int csvFileCounter = 0;
 
     void partitionData(List<Record> recordList, Double distanceThreshold) {
         partition2dSpaceForConcurrentSpatialJoin(recordList, distanceThreshold,
@@ -173,7 +173,7 @@ class SpatialPartitioner {
         try {
                 csvFileCounter++;
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-                        new FileOutputStream(TEMP_RECORDS_PATH.getValue()+"partition"+csvFileCounter.toString()+".csv")
+                        new FileOutputStream(TEMP_RECORDS_PATH.getValue()+"partition"+csvFileCounter+".csv")
                         , "UTF-8"));
             for (Record record : recordList) {
                 StringBuffer line = new StringBuffer();

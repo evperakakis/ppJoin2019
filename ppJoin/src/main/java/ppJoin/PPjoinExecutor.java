@@ -38,31 +38,32 @@ class PPjoinExecutor implements TextualJoinExecutor {
         LocalDateTime startTime = LocalDateTime.now();
 
         for (Map.Entry<Integer, Record> entryRM : recordMap.entrySet()) {
-            Integer recordIdX = entryRM.getKey();
+            int recordIdX = entryRM.getKey();
             Record recordX = entryRM.getValue();
 
-            Integer recordSizeX = recordX.getNGramsList().size();
+            int recordSizeX = recordX.getNGramsList().size();
 
             //This is A from "Efficient Similarity Joins for Near Duplicate Detection" paper
             HashMap<Integer, Integer> overlapMap = new HashMap<>();
 
             // Get prefix length
-            Integer prefixLength = PPjoinUtils.calculate_prefixLength(recordX, similarityThreshold);
+            int prefixLength = PPjoinUtils.calculate_prefixLength(recordX, similarityThreshold);
 
-            Integer positionI = 0;
+            int positionI = 0;
             for (String nGram : recordX.getNGramsList().subList(0, prefixLength)) {
                 positionI++;
                 if (InvertedIndex.getInstance().getIndex().get(nGram) != null) {
                     for (Occurrence occurrence : InvertedIndex.getInstance().getIndex().get(nGram)) {
-                        Integer recordIdY = occurrence.getRecordId();
-                        if (recordIdX.equals(recordIdY)) break;
+                        int recordIdY = occurrence.getRecordId();
+                        //if (recordIdX.equals(recordIdY)) break;
+                        if (recordIdX == recordIdY) break;
 
-                        Integer positionJ = occurrence.getPosition();
-                        Integer recordSizeY = recordMap.get(recordIdY).getNGramsList().size();
+                        int positionJ = occurrence.getPosition();
+                        int recordSizeY = recordMap.get(recordIdY).getNGramsList().size();
 
                         if ((recordSizeY >= (similarityThreshold * recordSizeX))) {
-                            Integer a = PPjoinUtils.calculate_a(similarityThreshold, recordSizeX, recordSizeY);
-                            Integer ubound = PPjoinUtils.calculate_ubound(recordSizeX, recordSizeY,
+                            int a = PPjoinUtils.calculate_a(similarityThreshold, recordSizeX, recordSizeY);
+                            int ubound = PPjoinUtils.calculate_ubound(recordSizeX, recordSizeY,
                                     positionI, positionJ);
                             if ((overlapMap.getOrDefault(recordIdY, 0) + ubound >= a))
                                 overlapMap.put(recordIdY, (overlapMap.getOrDefault(recordIdY, 0) + 1));
@@ -95,22 +96,22 @@ class PPjoinExecutor implements TextualJoinExecutor {
 
     private void ppJoinVerify (Record record, Map<Record,Integer> overlapMap, double simThreshold) {
 
-        Integer prefixLengthX = PPjoinUtils.calculate_prefixLength(record, simThreshold);
+        int prefixLengthX = PPjoinUtils.calculate_prefixLength(record, simThreshold);
 
         overlapMap.forEach((recordFromOverlapMap, overlap) -> {
             int intersection;
-            Integer ubound;
+            int ubound;
             List<String> tokenSet1 =  new ArrayList<>(), tokenSet2 =  new ArrayList<>();
 
-            Integer a = PPjoinUtils.calculate_a(simThreshold,
+            int a = PPjoinUtils.calculate_a(simThreshold,
                     record.getNGramsList().size(), recordFromOverlapMap.getNGramsList().size());
 
             if (overlap > 0) {
-                Integer prefixLengthY = PPjoinUtils.calculate_prefixLength(recordFromOverlapMap, simThreshold);
+                int prefixLengthY = PPjoinUtils.calculate_prefixLength(recordFromOverlapMap, simThreshold);
                 String wx = record.getNGramsList().get(prefixLengthX - 1);
-                Integer wxFreq = FrequencyIndex.getInstance().getIndex().get(wx);
+                int wxFreq = FrequencyIndex.getInstance().getIndex().get(wx);
                 String wy = recordFromOverlapMap.getNGramsList().get(prefixLengthY - 1);
-                Integer wyFreq = FrequencyIndex.getInstance().getIndex().get(wy);
+                int wyFreq = FrequencyIndex.getInstance().getIndex().get(wy);
                 // valueO is O as named in Verify
                 int valueO = overlap;
 
